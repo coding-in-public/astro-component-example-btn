@@ -1,4 +1,6 @@
 ---
+import Button from "../components/Button.astro";
+import "../styles/main.css";
 ---
 
 <html lang="en">
@@ -10,6 +12,14 @@
 		<title>Astro</title>
 	</head>
 	<body>
-		<h1>Astro</h1>
+		<h1>Astro Buttons</h1>
+		<Button id="btn1" theme="success" isfilled>
+			<span>Click Here</span>
+			<span>→</span>
+		</Button>
 	</body>
 </html>
+
+<script>
+	document.querySelector("#btn1")?.addEventListener("click", () => alert("yo"));
+</script>

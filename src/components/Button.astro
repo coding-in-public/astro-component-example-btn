@@ -1,0 +1,98 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+interface Props extends HTMLAttributes<"button"> {
+  type?: "button" | "submit";
+  size?: "sm" | "md" | "lg";
+  isfilled?: boolean;
+  theme?:
+    | "primary"
+    | "secondary"
+    | "success"
+    | "danger"
+    | "warning"
+    | "info"
+    | "light"
+    | "dark";
+  classes?: string;
+}
+
+const {
+  type = "button",
+  size = "md",
+  isfilled,
+  theme = "light",
+  classes,
+  ...rest
+} = Astro.props;
+
+const background = `var(--${theme})`;
+const foreground = theme === "light" ? "var(--primary)" : "var(--light)";
+---
+
+<button
+  class:list={[classes, { filled: isfilled }]}
+  {type}
+  data-size={size}
+  {...rest}
+>
+  <slot />
+</button>
+
+<style
+  define:vars={{
+    foreground,
+    background,
+  }}
+>
+  button {
+    /* resets */
+    font: inherit;
+    cursor: pointer;
+
+    /* variables */
+    --bkg: var(--background);
+    --color: var(--foreground);
+
+    /* default styles */
+    display: flex;
+    gap: 0.2em;
+    align-items: center;
+    background-color: var(--light);
+    color: var(--bkg);
+    border: 0.2em solid var(--bkg);
+    padding: 0.4em 1.25em;
+    transition: box-shadow 0.2s cubic-bezier(0.075, 0.82, 0.165, 1),
+      opacity 0.2s cubic-bezier(0.075, 0.82, 0.165, 1),
+      scale 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+
+  button.filled {
+    background-color: var(--bkg);
+    color: var(--color);
+    border: none;
+  }
+
+  button:focus {
+    outline-color: transparent;
+  }
+
+  button:hover {
+    opacity: 0.8;
+    scale: 1.05;
+  }
+
+  button:focus-visible {
+    box-shadow: 0 0 0 0.1em var(--light), 0 0 0 0.3em var(--bkg);
+  }
+
+  [data-size="sm"] {
+    font-size: 0.8rem;
+  }
+  [data-size="md"] {
+    font-size: 1.1rem;
+  }
+  [data-size="lg"] {
+    font-size: 1.5rem;
+  }
+</style>
